@@ -26,6 +26,7 @@
     </div>
 
     <script>
+        const waitMS = isShowMilliSeconds() || isShowFrames() ? 1 : 100
         $(function () {
             // 日付、時間文の表記設定初期化
             initializeDateTimeView();
@@ -33,7 +34,7 @@
             // 時間初期化（時差の値は"js/settings.js"ファイル参照）
             setInterval(function () {
                 initDateTimeDisplay(timeDiffsInHour);
-            }, isShowMilliSeconds() ? 1 : 100);
+            }, waitMS);
             initDateTimeDisplay(timeDiffsInHour);
         });
 
@@ -102,6 +103,13 @@
                     dateStyle = "display: none;";
                     timeStyle = "left: 10px; top: 10px; font-size: " + fontSizeTime + "px;";
                     break;
+                case 6: // 5: 年月日　時間時差＋ミリ秒付き（時間、分、秒、ミリ秒）
+                    fontSizeDate = fontSizeDate === 0 ? (isJaFormat ? 40 : 52) : fontSizeDate;
+                    fontSizeTime = fontSizeTime === 0 ? 70 : fontSizeTime;
+
+                    dateStyle = "left: 15px; top: 10px; font-size: " + fontSizeDate + "px;";
+                    timeStyle = "left: 10px; top: " + (10 + fontSizeDate + marginBetweenDateAndTime) + "px; font-size: " + fontSizeTime + "px; ";
+                    break;
             }
 
             // 日付けの共通設定
@@ -133,6 +141,9 @@
         function isShowMilliSeconds() {
             return showPattern == 5;
         }
+        function isShowFrames() {
+            return showPattern === 6
+        }
 
         function initDateTimeDisplay(_timeDiffInHour) {
             let dateIDs = ["clockDateWBorder", "clockDateNoBorder"];
@@ -144,11 +155,13 @@
             let month = formatTo2DigitText(date.getMonth() + 1);
             let day = formatTo2DigitText(date.getDate());
             let weekdayJa = getWeekdayInShortJa(date.getDay());
+            console.log(date.getDay())
             let weekdayEn = getWeekdayInShortEn(date.getDay());
             let hour = formatTo2DigitText(date.getHours());
             let minutes = formatTo2DigitText(date.getMinutes());
             let sec = formatTo2DigitText(date.getSeconds());
             let milliSecond = formatTo3DigitText(date.getMilliseconds());
+            let frames = formatTo2DigitText(Math.floor(milliSecond * 60 / 1000))
 
             // 日付け・時間の文字列設定
             let dateInfo = "";
@@ -185,7 +198,19 @@
                     timeInfo = hour + ":" + minutes + ":" + sec;
                     if (isShowMilliSeconds()) timeInfo += ":" + milliSecond;
                     break;
+                case 6:
+                    // 日付設定
+                    dateInfo = "JST " + year + "/" + month + "/" + day;
+                    if (isShowWeekday()) dateInfo += "（" + weekdayEn + "）";
+
+                    // 時間設定
+                    timeInfo = hour + ":" + minutes + ":" + sec;
+                    if (isShowFrames()) {
+                        timeInfo += "." + frames + "F";
+                    }
+                    break;
             }
+
 
             // 時間データを画面に反映させる
             for (var i = 0; i < dateIDs.length; i++) {

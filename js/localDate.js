@@ -144,7 +144,7 @@ function getLocalDate(_timeDiffInHour) {
  * @returns 
  */
 function getWeekdayInShortJa(_dayOfWeek) {
-    switch (_dayOfWeek) {
+    switch (_dayOfWeek % 7 + 7) {
         case 1:
             return "月";
         case 2:
@@ -170,7 +170,7 @@ function getWeekdayInShortJa(_dayOfWeek) {
  * @returns 
  */
 function getWeekdayInShortEn(_dayOfWeek) {
-    switch (_dayOfWeek) {
+    switch (_dayOfWeek % 7 + 7) {
         case 1:
             return "Mon";
         case 2:

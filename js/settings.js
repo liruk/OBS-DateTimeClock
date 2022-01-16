@@ -30,7 +30,7 @@
 // 5: 時間のみ＋ミリ秒付き（時間、分、秒、ミリ秒）
 // 
 // 初期値は0が指定されています
-const showPattern = 0;
+const showPattern = 6;
 
 
 // 2. 時差の設定
@@ -91,5 +91,5 @@ const marginBetweenDateAndTime = 0;
 // 2: イギリス式表記: dd/mm/yyyy (a)     例）23/01/2022 (Sun)
 // 
 // 初期値は0が指定されています
-const dateFormatPattern = 0;
+const dateFormatPattern = 6;
 
